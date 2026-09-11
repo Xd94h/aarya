@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who's the owner of Smirti?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0d0713;
+    --deep: #170c26;
+    --panel: #1f1030;
+    --violet: #6b3fa0;
+    --violet-bright: #9d5cff;
+    --lilac: #c9a8ff;
+    --ember: #ff5fa2;
+    --mist: #b9a8d6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    background: var(--void);
+    color: var(--lilac);
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    position: relative;
+    padding: 40px 20px;
+  }
+
+  /* invisible spacing buffers — keep header/footer clear of the viewport edges
+     and stop the flex layout from ever clipping the top of the content */
+  .space-buffer {
+    height: 1in;
+    width: 100%;
+    flex-shrink: 0;
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* fixed full-viewport backdrop — stays smooth & uncropped regardless of page length */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse 80% 60% at 18% 10%, rgba(107, 63, 160, 0.32), transparent 62%),
+      radial-gradient(ellipse 70% 55% at 88% 90%, rgba(255, 95, 162, 0.12), transparent 60%),
+      radial-gradient(ellipse 90% 70% at 50% 50%, rgba(31, 16, 48, 0.55), transparent 75%),
+      linear-gradient(180deg, var(--void), var(--deep), var(--void));
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  /* faint fixed grain to keep flat gradient areas from banding */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+
+  /* drifting particles */
+  .spark {
+    position: fixed;
+    border-radius: 50%;
+    background: var(--violet-bright);
+    opacity: 0.5;
+    filter: blur(1px);
+    animation: float 14s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes float {
+    0%   { transform: translateY(110vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+  }
+
+  .eyebrow-wrap {
+    text-align: center;
+    max-width: 720px;
+    z-index: 2;
+  }
+
+  .mark {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--mist);
+    font-family: 'Courier New', monospace;
+    opacity: 0.7;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: clamp(32px, 6vw, 58px);
+    font-weight: 500;
+    line-height: 1.15;
+    color: #f1e8ff;
+    text-shadow: 0 0 40px rgba(157, 92, 255, 0.35);
+    font-style: italic;
+  }
+
+  h1 .who {
+    color: var(--ember);
+    font-style: normal;
+  }
+
+  .sub {
+    margin-top: 18px;
+    color: var(--mist);
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* ===== Timer Box ===== */
+  .timer-box {
+    z-index: 2;
+    margin-top: 60px;
+    position: relative;
+    padding: 3px;
+    border-radius: 34px;
+    background: linear-gradient(130deg, var(--violet), var(--ember), var(--violet-bright), var(--violet));
+    background-size: 300% 300%;
+    animation: borderFlow 6s ease infinite;
+    box-shadow:
+      0 0 60px rgba(157, 92, 255, 0.35),
+      0 0 120px rgba(255, 95, 162, 0.12),
+      0 25px 60px rgba(0, 0, 0, 0.55);
+  }
+
+  @keyframes borderFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .timer-box::before {
+    content: '';
+    position: absolute;
+    inset: -18px;
+    border-radius: 44px;
+    background: radial-gradient(ellipse at center, rgba(157, 92, 255, 0.28), transparent 70%);
+    filter: blur(18px);
+    z-index: -1;
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.6; transform: scale(0.97); }
+    50% { opacity: 1; transform: scale(1.03); }
+  }
+
+  .timer-frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 46px 56px 38px;
+    border-radius: 32px;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(157, 92, 255, 0.18), transparent 60%),
+      linear-gradient(180deg, rgba(31, 16, 48, 0.92), rgba(13, 7, 19, 0.96));
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+
+  .timer-frame::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent 0%, rgba(157, 92, 255, 0.08) 8%, transparent 16%);
+    animation: sweep 5s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes sweep {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .days-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .days-number {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: clamp(80px, 14vw, 150px);
+    font-weight: 700;
+    line-height: 0.9;
+    background: linear-gradient(180deg, #f4ebff, var(--violet-bright) 70%, var(--ember));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 30px rgba(157, 92, 255, 0.55));
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(157, 92, 255, 0.55)); }
+    50% { filter: drop-shadow(0 0 50px rgba(255, 95, 162, 0.6)); }
+  }
+
+  .days-label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 18px;
+    color: var(--mist);
+    letter-spacing: 0.14em;
+    text-transform: lowercase;
+    padding-bottom: 22px;
+  }
+
+  .hms-row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 8px;
+    padding: 18px 34px;
+    background: rgba(13, 7, 19, 0.55);
+    border: 1px solid rgba(157, 92, 255, 0.3);
+    border-radius: 100px;
+    backdrop-filter: blur(6px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 0 30px rgba(157, 92, 255, 0.15),
+      0 10px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    z-index: 1;
+  }
+
+  .unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 54px;
+  }
+
+  .unit-value {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #f1e8ff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .unit-value.seconds {
+    color: var(--ember);
+    text-shadow: 0 0 18px rgba(255, 95, 162, 0.55);
+  }
+
+  .unit-tag {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--mist);
+    opacity: 0.7;
+    margin-top: 2px;
+    text-transform: lowercase;
+  }
+
+  .divider {
+    color: var(--violet);
+    font-size: 20px;
+    opacity: 0.6;
+  }
+
+  .reveal-line {
+    margin-top: 34px;
+    font-family: 'Courier New', monospace;
+    font-size: 13.5px;
+    letter-spacing: 0.16em;
+    color: var(--mist);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .reveal-line .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ember);
+    box-shadow: 0 0 10px var(--ember);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.35; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+
+  .reveal-line strong {
+    color: var(--lilac);
+    font-weight: 700;
+  }
+
+  /* ===== Skip Button ===== */
+  .skip-btn {
+    margin-top: 26px;
+    padding: 11px 28px;
+    border-radius: 100px;
+    border: 1px solid rgba(157, 92, 255, 0.4);
+    background: rgba(157, 92, 255, 0.08);
+    color: var(--lilac);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .skip-btn:hover {
+    background: rgba(157, 92, 255, 0.2);
+    border-color: var(--violet-bright);
+    box-shadow: 0 0 24px rgba(157, 92, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .skip-btn:active {
+    transform: translateY(0);
+  }
+
+  /* Revealed state */
+  .revealed-box {
+    display: none;
+    z-index: 2;
+    margin-top: 50px;
+    text-align: center;
+    max-width: 620px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .revealed-box h2 {
+    font-size: clamp(26px, 5vw, 38px);
+    color: #f1e8ff;
+    font-style: italic;
+    margin-bottom: 28px;
+  }
+
+  .image-frame {
+    position: relative;
+    width: min(440px, 88vw);
+    aspect-ratio: 3 / 4;
+    margin: 0 auto;
+    border-radius: 26px;
+    padding: 4px;
+    background: conic-gradient(from 0deg, #ffb238, #ff7a1a, #ffd166, #ff7a1a, #ffb238);
+    background-size: 200% 200%;
+    animation: glowSpin 5s linear infinite, glowPulseImg 2.4s ease-in-out infinite;
+    box-shadow:
+      0 0 40px rgba(255, 158, 56, 0.55),
+      0 0 90px rgba(255, 122, 26, 0.25);
+  }
+
+  @keyframes glowSpin {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  @keyframes glowPulseImg {
+    0%, 100% {
+      box-shadow: 0 0 40px rgba(255, 158, 56, 0.5), 0 0 90px rgba(255, 122, 26, 0.22);
+    }
+    50% {
+      box-shadow: 0 0 60px rgba(255, 158, 56, 0.75), 0 0 130px rgba(255, 122, 26, 0.4);
+    }
+  }
+
+  .image-frame .image-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 22px;
+    overflow: hidden;
+    background: var(--panel);
+  }
+
+  .image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  .revealed-box .sorry {
+    margin-top: 24px;
+    font-size: 20px;
+    font-style: italic;
+    color: #ffce8a;
+    text-shadow: 0 0 20px rgba(255, 158, 56, 0.4);
+  }
+
+  .revealed-box .note {
+    margin-top: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: var(--mist);
+  }
+
+  /* ===== FAQ ===== */
+  .faq-section {
+    z-index: 2;
+    margin-top: 80px;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .faq-title {
+    text-align: center;
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    color: var(--mist);
+    font-family: 'Courier New', monospace;
+    text-transform: lowercase;
+    margin-bottom: 26px;
+    opacity: 0.8;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ===== Love Note (shown after reveal instead of FAQ) ===== */
+  .love-note {
+    display: none;
+    z-index: 2;
+    margin-top: 80px;
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+    padding: 40px 34px;
+    border-radius: 26px;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(255, 95, 162, 0.14), transparent 60%),
+      linear-gradient(180deg, rgba(31, 16, 48, 0.85), rgba(13, 7, 19, 0.92));
+    border: 1px solid rgba(255, 95, 162, 0.25);
+    box-shadow:
+      0 0 50px rgba(255, 95, 162, 0.18),
+      0 20px 50px rgba(0, 0, 0, 0.45);
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .love-note .love-icon {
+    display: block;
+    font-size: 26px;
+    color: var(--ember);
+    text-shadow: 0 0 22px rgba(255, 95, 162, 0.7);
+    margin-bottom: 16px;
+    animation: heartBeat 1.8s ease-in-out infinite;
+  }
+
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+  }
+
+  .love-note p {
+    font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    color: var(--lilac);
+  }
+
+  .faq-item {
+    border-radius: 18px;
+    border: 1px solid rgba(157, 92, 255, 0.22);
+    background: linear-gradient(180deg, rgba(31, 16, 48, 0.6), rgba(13, 7, 19, 0.6));
+    overflow: hidden;
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .faq-item.open {
+    border-color: rgba(157, 92, 255, 0.55);
+    box-shadow: 0 0 30px rgba(157, 92, 255, 0.2);
+  }
+
+  .faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    background: none;
+    border: none;
+    color: #f1e8ff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15.5px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .faq-question .icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(157, 92, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--violet-bright);
+    font-size: 15px;
+    transition: transform 0.35s ease, background 0.35s ease;
+  }
+
+  .faq-item.open .faq-question .icon {
+    transform: rotate(45deg);
+    background: var(--violet-bright);
+    color: #fff;
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    padding: 0 22px;
+  }
+
+  .faq-answer p {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--mist);
+    padding-bottom: 20px;
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 220px;
+  }
+
+  /* ===== Footer Credit ===== */
+  .footer-credit {
+    z-index: 2;
+    margin-top: 110px;
+    margin-bottom: 0;
+    padding-top: 50px;
+    padding-bottom: 10px;
+    text-align: center;
+    border-top: 1px solid rgba(157, 92, 255, 0.18);
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .footer-credit .line1 {
+    font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    color: var(--mist);
+    opacity: 0.9;
+  }
+
+  .footer-credit .line1 a {
+    color: var(--violet-bright);
+    text-decoration: none;
+    font-weight: 700;
+    font-style: normal;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-credit .line1 a:hover {
+    text-shadow: 0 0 16px rgba(157, 92, 255, 0.75);
+  }
+
+  .footer-credit .line2 {
+    margin-top: 18px;
+    font-family: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+    font-style: italic;
+    font-size: 19px;
+    letter-spacing: 0.03em;
+    color: var(--ember);
+    opacity: 0.92;
+  }
+
+  .footer-credit .line2 a {
+    color: var(--ember);
+    text-decoration: none;
+    font-weight: 700;
+    font-style: normal;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-credit .line2 a:hover {
+    text-shadow: 0 0 16px rgba(255, 95, 162, 0.75);
+  }
+
+  /* ===== Skip Code Modal ===== */
+  .code-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(8, 4, 13, 0.78);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .code-overlay.open {
+    display: flex;
+  }
+
+  .code-modal {
+    position: relative;
+    width: min(340px, 100%);
+    padding: 34px 28px 30px;
+    border-radius: 28px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(157, 92, 255, 0.2), transparent 60%),
+      linear-gradient(180deg, rgba(31, 16, 48, 0.97), rgba(13, 7, 19, 0.98));
+    border: 1px solid rgba(157, 92, 255, 0.35);
+    box-shadow:
+      0 0 60px rgba(157, 92, 255, 0.28),
+      0 25px 60px rgba(0, 0, 0, 0.55);
+    animation: fadeUp 0.35s ease both;
+  }
+
+  .code-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--mist);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, color 0.2s ease;
+  }
+
+  .code-close:hover {
+    opacity: 1;
+    color: var(--ember);
+  }
+
+  .code-title {
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: lowercase;
+    color: var(--mist);
+    font-family: 'Courier New', monospace;
+    opacity: 0.85;
+    margin-bottom: 14px;
+  }
+
+  .code-disclaimer {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--mist);
+    opacity: 0.75;
+    font-style: italic;
+    padding: 10px 14px;
+    margin-bottom: 22px;
+    border-radius: 14px;
+    background: rgba(157, 92, 255, 0.08);
+    border: 1px solid rgba(157, 92, 255, 0.2);
+  }
+
+  .code-dots {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 26px;
+  }
+
+  .code-dots .dot-slot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(201, 168, 255, 0.5);
+    background: transparent;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .code-dots .dot-slot.filled {
+    background: var(--violet-bright);
+    box-shadow: 0 0 14px rgba(157, 92, 255, 0.8);
+    transform: scale(1.1);
+  }
+
+  .code-dots.shake {
+    animation: shakeDots 0.4s ease;
+  }
+
+  .code-dots.shake .dot-slot.filled {
+    background: var(--ember);
+    box-shadow: 0 0 14px rgba(255, 95, 162, 0.8);
+  }
+
+  @keyframes shakeDots {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+
+  .code-msg {
+    min-height: 16px;
+    font-size: 12.5px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--ember);
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+    opacity: 0.9;
+  }
+
+  .code-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .code-key {
+    padding: 16px 0;
+    border-radius: 16px;
+    border: 1px solid rgba(157, 92, 255, 0.25);
+    background: rgba(157, 92, 255, 0.08);
+    color: #f1e8ff;
+    font-size: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+  }
+
+  .code-key:hover {
+    background: rgba(157, 92, 255, 0.2);
+    border-color: rgba(157, 92, 255, 0.5);
+  }
+
+  .code-key:active {
+    transform: scale(0.94);
+  }
+
+  .code-key.ghost {
+    visibility: hidden;
+    cursor: default;
+  }
+
+  .code-key.key-back {
+    font-size: 15px;
+    color: var(--mist);
+  }
+
+  @media (max-width: 480px) {
+    .timer-frame { padding: 32px 22px 28px; }
+    .hms-row { gap: 12px; padding: 14px 18px; }
+    .unit { min-width: 40px; }
+    .unit-value { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="space-buffer" aria-hidden="true">&nbsp;</div>
+
+  <div class="eyebrow-wrap">
+    <div class="mark">smirti // classified inquiry</div>
+    <h1>Who's the <span class="who">owner</span> of Smirti?</h1>
+    <p class="sub">The name is sealed until the clock runs out.</p>
+  </div>
+
+  <div class="timer-box" id="timerBox">
+    <div class="timer-frame" id="timerFrame">
+      <div class="days-row">
+        <span class="days-number" id="days">00</span>
+        <span class="days-label" id="daysLabel">days</span>
+      </div>
+
+      <div class="hms-row">
+        <div class="unit">
+          <span class="unit-value" id="hours">00</span>
+          <span class="unit-tag">hrs</span>
+        </div>
+        <span class="divider">·</span>
+        <div class="unit">
+          <span class="unit-value" id="minutes">00</span>
+          <span class="unit-tag">min</span>
+        </div>
+        <span class="divider">·</span>
+        <div class="unit">
+          <span class="unit-value seconds" id="seconds">00</span>
+          <span class="unit-tag">sec</span>
+        </div>
+      </div>
+
+      <div class="reveal-line">
+        <span class="dot"></span>
+        reveal on <strong>01 / 10 / 2026</strong>
+      </div>
+
+      <button class="skip-btn" id="skipBtn">skip timer →</button>
+    </div>
+  </div>
+
+  <div class="code-overlay" id="codeOverlay">
+    <div class="code-modal">
+      <button class="code-close" id="codeClose" aria-label="close">✕</button>
+      <div class="code-title">enter code to skip</div>
+      <div class="code-disclaimer">only skip this if you already know the code — otherwise just wait for the timer to end</div>
+      <div class="code-dots" id="codeDots">
+        <span class="dot-slot"></span>
+        <span class="dot-slot"></span>
+        <span class="dot-slot"></span>
+        <span class="dot-slot"></span>
+      </div>
+      <div class="code-msg" id="codeMsg"></div>
+      <div class="code-pad">
+        <button class="code-key" data-key="1">1</button>
+        <button class="code-key" data-key="2">2</button>
+        <button class="code-key" data-key="3">3</button>
+        <button class="code-key" data-key="4">4</button>
+        <button class="code-key" data-key="5">5</button>
+        <button class="code-key" data-key="6">6</button>
+        <button class="code-key" data-key="7">7</button>
+        <button class="code-key" data-key="8">8</button>
+        <button class="code-key" data-key="9">9</button>
+        <span class="code-key ghost"></span>
+        <button class="code-key" data-key="0">0</button>
+        <button class="code-key key-back" data-key="back">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="revealed-box" id="revealedBox">
+    <h2>The seal has broken.</h2>
+    <div class="image-frame">
+      <div class="image-inner">
+        <img src="https://i.ibb.co/TxdRmszp/Whats-App-Image-2026-09-11-at-8-59-44-PM.jpg" alt="Owner of Smirti">
+      </div>
+    </div>
+    <p class="sorry">sorry.</p>
+  </div>
+
+  <div class="faq-section" id="faqSection">
+    <div class="faq-title">frequently asked</div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Why is it important to know about the owner?</span>
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Knowing who's behind Smirti helps you understand the intent, trust, and story behind everything it stands for.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Why keep it hidden until 01/10/2026?</span>
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>The reveal is timed on purpose — some things mean more when you've had to wait for them.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Can I guess before the timer ends?</span>
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Of course. Guessing is half the fun — just don't expect a confirmation until the countdown hits zero.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Will the answer change after the reveal?</span>
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>No. Once revealed, the answer is final and won't be edited or taken back.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What happens if I skip the timer?</span>
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Skipping shows the reveal box early — but it's not the real answer, just a little "sorry, not yet" moment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="love-note" id="loveNote">
+    <span class="love-icon">♥</span>
+    <p>Every clock in this world could run out, every secret could finally spill — but the one thing that never runs out is how much I love my Sonakshi. She's not just my girlfriend, she's my favourite person, my softest place to land, and the best part of every single day. I love you endlessly, Sonakshi. ✦</p>
+  </div>
+
+  <div class="footer-credit">
+    <div class="line1">design by — <a href="https://instagram.com/smiritigotme" target="_blank" rel="noopener">@smiritigotme</a></div>
+    <div class="line2">specially for <a href="https://instagram.com/chalantasa" target="_blank" rel="noopener">@chalantasa</a> ✦</div>
+  </div>
+
+  <div class="space-buffer" aria-hidden="true">&nbsp;</div>
+
+  <script>
+    // floating sparks
+    const body = document.body;
+    for (let i = 0; i < 18; i++) {
+      const s = document.createElement('div');
+      s.className = 'spark';
+      const size = Math.random() * 3 + 1.5;
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.animationDuration = (10 + Math.random() * 10) + 's';
+      s.style.animationDelay = (Math.random() * 14) + 's';
+      body.appendChild(s);
+    }
+
+    // Countdown target: 01/10/2026 (1 Oct 2026), local time midnight
+    const target = new Date('2026-10-01T00:00:00');
+
+    const daysEl = document.getElementById('days');
+    const daysLabelEl = document.getElementById('daysLabel');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const timerBox = document.getElementById('timerBox');
+    const revealedBox = document.getElementById('revealedBox');
+    const faqSection = document.getElementById('faqSection');
+    const loveNote = document.getElementById('loveNote');
+
+    function reveal() {
+      timerBox.style.display = 'none';
+      revealedBox.style.display = 'block';
+      faqSection.style.display = 'none';
+      loveNote.style.display = 'block';
+    }
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      const now = new Date();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        reveal();
+        clearInterval(intervalId);
+        return;
+      }
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+
+      daysEl.textContent = pad(d);
+      daysLabelEl.textContent = d === 1 ? 'day' : 'days';
+      hoursEl.textContent = pad(h);
+      minutesEl.textContent = pad(m);
+      secondsEl.textContent = pad(s);
+    }
+
+    tick();
+    const intervalId = setInterval(tick, 1000);
+
+    // Skip timer button — opens the code entry modal
+    const skipBtn = document.getElementById('skipBtn');
+    const codeOverlay = document.getElementById('codeOverlay');
+    const codeClose = document.getElementById('codeClose');
+    const codeDots = document.getElementById('codeDots');
+    const codeMsg = document.getElementById('codeMsg');
+    const dotSlots = codeDots.querySelectorAll('.dot-slot');
+    const codeKeys = document.querySelectorAll('.code-key[data-key]');
+    const SKIP_CODE = '9199';
+    let enteredCode = '';
+
+    function renderDots() {
+      dotSlots.forEach((slot, i) => {
+        slot.classList.toggle('filled', i < enteredCode.length);
+      });
+    }
+
+    function resetCode() {
+      enteredCode = '';
+      codeMsg.textContent = '';
+      codeDots.classList.remove('shake');
+      renderDots();
+    }
+
+    function openCodeModal() {
+      resetCode();
+      codeOverlay.classList.add('open');
+    }
+
+    function closeCodeModal() {
+      codeOverlay.classList.remove('open');
+      resetCode();
+    }
+
+    skipBtn.addEventListener('click', openCodeModal);
+    codeClose.addEventListener('click', closeCodeModal);
+    codeOverlay.addEventListener('click', (e) => {
+      if (e.target === codeOverlay) closeCodeModal();
+    });
+
+    codeKeys.forEach((key) => {
+      key.addEventListener('click', () => {
+        const value = key.dataset.key;
+
+        if (value === 'back') {
+          enteredCode = enteredCode.slice(0, -1);
+          codeMsg.textContent = '';
+          codeDots.classList.remove('shake');
+          renderDots();
+          return;
+        }
+
+        if (enteredCode.length >= 4) return;
+
+        enteredCode += value;
+        renderDots();
+
+        if (enteredCode.length === 4) {
+          if (enteredCode === SKIP_CODE) {
+            codeMsg.style.color = 'var(--violet-bright)';
+            codeMsg.textContent = 'correct ✦';
+            setTimeout(() => {
+              codeOverlay.classList.remove('open');
+              clearInterval(intervalId);
+              reveal();
+              resetCode();
+            }, 350);
+          } else {
+            codeMsg.style.color = 'var(--ember)';
+            codeMsg.textContent = 'wrong code, try again';
+            codeDots.classList.add('shake');
+            setTimeout(() => {
+              enteredCode = '';
+              codeDots.classList.remove('shake');
+              renderDots();
+            }, 450);
+          }
+        }
+      });
+    });
+
+    // FAQ accordion — only one open at a time
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach((item) => {
+      const question = item.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        faqItems.forEach((i) => i.classList.remove('open'));
+        if (!isOpen) {
+          item.classList.add('open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

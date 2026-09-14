@@ -626,6 +626,165 @@
     text-shadow: 0 0 16px rgba(255, 95, 162, 0.75);
   }
 
+  /* ===== Timer End Popup ===== */
+  .reveal-popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgba(8, 4, 13, 0.82);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .reveal-popup-overlay.open {
+    display: flex;
+  }
+
+  .reveal-popup {
+    position: relative;
+    width: min(360px, 100%);
+    padding: 42px 30px 34px;
+    border-radius: 30px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 30% 0%, rgba(157, 92, 255, 0.22), transparent 60%),
+      linear-gradient(180deg, rgba(31, 16, 48, 0.97), rgba(13, 7, 19, 0.98));
+    border: 1px solid rgba(157, 92, 255, 0.35);
+    box-shadow:
+      0 0 60px rgba(157, 92, 255, 0.3),
+      0 25px 60px rgba(0, 0, 0, 0.55);
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .reveal-popup .popup-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ember);
+    box-shadow: 0 0 12px var(--ember);
+    margin: 0 auto 18px;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  .reveal-popup p {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    color: #f1e8ff;
+    line-height: 1.6;
+    margin-bottom: 26px;
+  }
+
+  .see-who-btn {
+    padding: 13px 30px;
+    border-radius: 100px;
+    border: 1px solid rgba(157, 92, 255, 0.5);
+    background: linear-gradient(130deg, rgba(157, 92, 255, 0.28), rgba(255, 95, 162, 0.18));
+    color: #f1e8ff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .see-who-btn:hover {
+    box-shadow: 0 0 26px rgba(157, 92, 255, 0.5);
+    transform: translateY(-2px);
+    border-color: var(--violet-bright);
+  }
+
+  .see-who-btn:active {
+    transform: translateY(0);
+  }
+
+  /* ===== Image Carousel ===== */
+  .image-frame {
+    touch-action: pan-y;
+  }
+
+  .image-frame .image-inner {
+    position: relative;
+  }
+
+  .carousel-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .carousel-img.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 158, 56, 0.5);
+    background: rgba(13, 7, 19, 0.65);
+    backdrop-filter: blur(4px);
+    color: #ffe6c4;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: all 0.25s ease;
+  }
+
+  .carousel-btn:hover {
+    background: rgba(255, 122, 26, 0.35);
+    box-shadow: 0 0 18px rgba(255, 158, 56, 0.5);
+  }
+
+  .carousel-btn.prev { left: -18px; }
+  .carousel-btn.next { right: -18px; }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .carousel-dots .cdot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(201, 168, 255, 0.35);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .carousel-dots .cdot.active {
+    background: #ffb238;
+    box-shadow: 0 0 10px rgba(255, 178, 56, 0.7);
+    transform: scale(1.25);
+  }
+
+  @media (max-width: 480px) {
+    .carousel-btn.prev { left: -10px; width: 34px; height: 34px; font-size: 17px; }
+    .carousel-btn.next { right: -10px; width: 34px; height: 34px; font-size: 17px; }
+  }
+
   /* ===== Skip Code Modal ===== */
   .code-overlay {
     display: none;
@@ -840,6 +999,14 @@
     </div>
   </div>
 
+  <div class="reveal-popup-overlay" id="revealPopupOverlay">
+    <div class="reveal-popup">
+      <div class="popup-dot"></div>
+      <p>The timer has been end<br>click on next "See who i'm"</p>
+      <button class="see-who-btn" id="seeWhoBtn">See who i'm →</button>
+    </div>
+  </div>
+
   <div class="code-overlay" id="codeOverlay">
     <div class="code-modal">
       <button class="code-close" id="codeClose" aria-label="close">✕</button>
@@ -872,9 +1039,22 @@
   <div class="revealed-box" id="revealedBox">
     <h2>The seal has broken.</h2>
     <div class="image-frame">
-      <div class="image-inner">
-        <img src="https://i.ibb.co/TxdRmszp/Whats-App-Image-2026-09-11-at-8-59-44-PM.jpg" alt="Owner of Smirti">
+      <div class="image-inner" id="carouselInner">
+        <img src="PASTE LINK HERE 1" class="carousel-img active" alt="Owner of Smirti 1">
+        <img src="PASTE LINK HERE 2" class="carousel-img" alt="Owner of Smirti 2">
+        <img src="PASTE LINK HERE 3" class="carousel-img" alt="Owner of Smirti 3">
+        <img src="PASTE LINK HERE 4" class="carousel-img" alt="Owner of Smirti 4">
+        <img src="PASTE LINK HERE 5" class="carousel-img" alt="Owner of Smirti 5">
       </div>
+      <button class="carousel-btn prev" id="prevImgBtn" aria-label="previous">‹</button>
+      <button class="carousel-btn next" id="nextImgBtn" aria-label="next">›</button>
+    </div>
+    <div class="carousel-dots" id="carouselDots">
+      <span class="cdot active" data-index="0"></span>
+      <span class="cdot" data-index="1"></span>
+      <span class="cdot" data-index="2"></span>
+      <span class="cdot" data-index="3"></span>
+      <span class="cdot" data-index="4"></span>
     </div>
     <p class="sorry">sorry.</p>
   </div>
@@ -973,13 +1153,25 @@
     const revealedBox = document.getElementById('revealedBox');
     const faqSection = document.getElementById('faqSection');
     const loveNote = document.getElementById('loveNote');
+    const revealPopupOverlay = document.getElementById('revealPopupOverlay');
+    const seeWhoBtn = document.getElementById('seeWhoBtn');
 
+    // Step 1: timer ends -> hide timer, show "timer has ended" popup
     function reveal() {
       timerBox.style.display = 'none';
+      revealPopupOverlay.classList.add('open');
+    }
+
+    // Step 2: user clicks "See who i'm" -> close popup, show the image reveal
+    function showFinalReveal() {
+      revealPopupOverlay.classList.remove('open');
       revealedBox.style.display = 'block';
       faqSection.style.display = 'none';
       loveNote.style.display = 'block';
+      initCarousel();
     }
+
+    seeWhoBtn.addEventListener('click', showFinalReveal);
 
     function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -1088,6 +1280,52 @@
         }
       });
     });
+
+    // ===== Image Carousel (5 images, next/prev + swipe) =====
+    const carouselImgs = document.querySelectorAll('.carousel-img');
+    const carouselDots = document.querySelectorAll('.carousel-dots .cdot');
+    const prevImgBtn = document.getElementById('prevImgBtn');
+    const nextImgBtn = document.getElementById('nextImgBtn');
+    const carouselInner = document.getElementById('carouselInner');
+    let currentImg = 0;
+    let carouselInitialized = false;
+
+    function goToImg(index) {
+      const total = carouselImgs.length;
+      currentImg = (index + total) % total;
+      carouselImgs.forEach((img, i) => img.classList.toggle('active', i === currentImg));
+      carouselDots.forEach((dot, i) => dot.classList.toggle('active', i === currentImg));
+    }
+
+    function initCarousel() {
+      if (carouselInitialized) return;
+      carouselInitialized = true;
+      goToImg(0);
+    }
+
+    prevImgBtn.addEventListener('click', () => goToImg(currentImg - 1));
+    nextImgBtn.addEventListener('click', () => goToImg(currentImg + 1));
+
+    carouselDots.forEach((dot) => {
+      dot.addEventListener('click', () => goToImg(parseInt(dot.dataset.index, 10)));
+    });
+
+    // swipe support (touch)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carouselInner.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carouselInner.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 40) {
+        if (diff < 0) goToImg(currentImg + 1); // swipe left -> next
+        else goToImg(currentImg - 1); // swipe right -> prev
+      }
+    }, { passive: true });
 
     // FAQ accordion — only one open at a time
     const faqItems = document.querySelectorAll('.faq-item');

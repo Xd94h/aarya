@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Madhurima Kuchupuchu 💅</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<style>
+  html, body { height: 100%; margin: 0; background: #000; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<!-- Music file: same folder me "music.mp3" naam se rakho (hidden, loop me bajegi) -->
+<audio id="bgm" src="music.mp3" loop preload="auto" style="display:none"></audio>
+
+<script>
+(function () {
+  /* ---------- MUSIC (hidden, background loop) ---------- */
+  var bgm = document.getElementById("bgm");
+  bgm.volume = 0.7;
+  var events = ["pointerdown", "click", "touchstart", "touchend", "keydown", "wheel"];
+
+  function removeUnlock() {
+    events.forEach(function (e) { window.removeEventListener(e, unlock); });
+  }
+  function startMusic() {
+    var p = bgm.play();
+    if (p && p.then) {
+      p.then(removeUnlock).catch(function () {});
+    }
+  }
+  function unlock() { startMusic(); }
+
+  events.forEach(function (e) { window.addEventListener(e, unlock); });
+  startMusic(); // autoplay try; blocked hua to first tap/click pe chalega
+
+  /* ---------- RAIN ---------- */
+  var WORD = "Madhurima Kuchupuchu 💅";
+  var canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  var w, h, drops = [], last = 0;
+
+  function fontFor(size) { return size + "px Anton, Impact, 'Arial Narrow', sans-serif"; }
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function spawn(d, initial) {
+    d.size = rand(22, 34);
+    ctx.font = fontFor(d.size);
+    d.w = ctx.measureText(WORD).width;
+    d.x = rand(-d.w * 0.2, Math.max(0, w - d.w * 0.8));
+    d.v = rand(90, 170) * (d.size / 28);
+    d.y = initial ? rand(-h * 0.1, h) : -d.size * rand(1, 8);
+    return d;
+  }
+
+  function setup() {
+    var dpr = window.devicePixelRatio || 1;
+    w = window.innerWidth; h = window.innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = fontFor(28);
+    var ww = ctx.measureText(WORD).width;
+    var n = Math.max(8, Math.round((w * h) / (ww * 124)));
+    drops = [];
+    for (var i = 0; i < n; i++) drops.push(spawn({}, true));
+  }
+
+  function frame(t) {
+    var dt = Math.min(0.05, (t - last) / 1000 || 0.016);
+    last = t;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#fff";
+    ctx.textBaseline = "top";
+    for (var i = 0; i < drops.length; i++) {
+      var d = drops[i];
+      d.y += d.v * dt;
+      if (d.y > h) spawn(d, false);
+      ctx.font = fontFor(d.size);
+      ctx.fillText(WORD, d.x, d.y);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function start() { setup(); requestAnimationFrame(frame); }
+  window.addEventListener("resize", setup);
+  if (document.fonts && document.fonts.load) {
+    document.fonts.load(fontFor(28), WORD).then(start, start);
+  } else { start(); }
+})();
+</script>
+</body>
+</html>
